@@ -7,11 +7,37 @@ var randomNumber = function(min, max) {
   return value;
 };
 
+var fightOrSkip = function() {
+  // ask player if they'd like to fight or skip using fightOrSkip function
+  var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
+
+  // Conditional Recursive Function Call
+  if (promptFight === "" || promptFight === null) {
+    window.alert("You need to provide a valid answer! Please try again.");
+    return fightOrSkip();
+  }
+
+  // if player picks "skip" confirm and then stop the loop
+  if (promptFight === "skip" || promptFight === "SKIP") {
+    // CONFIRM PLAYER WANTS TO SKIP
+    var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+
+    // if yes (true), leave fight
+    if (confirmSkip) {
+      window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+      // subtract money from playerMoney for skipping
+      playerInfo.playerMoney = playerInfo.money - 10;
+      shop();
+      }
+    }
+  }
+
 // fight function (now with parameter for enemy's object holding name, health, and attack values)
 var fight = function(enemy) {
   while (playerInfo.health > 0 && enemy.health > 0) {
     // ask player if they'd like to fight or run
-    var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
+   fightOrSkip();
+   var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
 
     // if player picks "skip" confirm and then stop the loop
     if (promptFight === "skip" || promptFight === "SKIP") {
@@ -75,7 +101,7 @@ var startGame = function() {
   playerInfo.reset();
   var getPlayerName = function() {
     var name = "";
-    }
+    
 
     while(name === "" || name === null) {
       name = prompt("What is your robot's name?");
@@ -84,6 +110,7 @@ var startGame = function() {
     console.log("Your robot's name is " + name);
     return name;
   };
+}
 
   // fight each enemy robot by looping over them and fighting them one at a time
   for (var i = 0; i < enemyInfo.length; i++) {
@@ -118,11 +145,11 @@ var startGame = function() {
       window.alert("You have lost your robot in battle! Game Over!");
       break;
     }
-  }
+  
 
   // after loop ends, we are either out of player.health or enemies to fight, so run the endGame function
   endGame();
-};
+  };
 
 // function to end the entire game
 var endGame = function() {
